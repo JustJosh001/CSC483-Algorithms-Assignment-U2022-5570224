@@ -1,0 +1,43 @@
+# Compiled Java class files
+*.class
+out/
+bin/
+build/
+target/
+
+# IDE configuration files
+.idea/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+.vscode/
+*.code-workspace
+nbproject/
+nbactions.xml
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# JUnit standalone launcher jar (download separately per README)
+junit-platform-console-standalone*.jar
+
+# Maven/Gradle build files (used, but just in case)
+pom.xml
+build.gradle
+gradlew
+gradlew.bat
+.gradle/
