@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * <p>Covers: sequential search, binary search, name search,
  * addProduct (sorted insertion), hybrid name search.
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  */
 @DisplayName("CSC483 – Search Algorithms Tests")
 class SearchAlgorithmsTest {

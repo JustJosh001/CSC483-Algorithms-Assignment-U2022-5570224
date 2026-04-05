@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * JUnit 5 tests for {@link SortingAlgorithms}.
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  */
 @DisplayName("CSC483 – Sorting Algorithms Tests")
 class SortingAlgorithmsTest {

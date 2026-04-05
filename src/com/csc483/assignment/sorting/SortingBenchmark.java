@@ -13,51 +13,77 @@ import java.util.Random;
  *   <li>Nearly sorted (90% sorted, 10% swapped)</li>
  *   <li>Many duplicates (only 10 distinct values)</li>
  * </ul>
- * for input sizes: 100, 1 000, 10 000, 100 000.
+ * for input sizes: 100, 1,000, 10,000, 100,000.
  *
- * @author CSC483 Student
+ * <p>At the end, prints a combined C3 Summary Table showing n=10,000
+ * performance across all data types for easy comparison.
+ *
+ * @author Student ID: U2022/5570224
  * @version 1.0
  */
 public class SortingBenchmark {
 
-    private static final int[]    SIZES            = {100, 1_000, 10_000, 100_000};
-    private static final int      RUNS             = 5;
-    private static final int      FORMAT_THRESHOLD = 1_000; // format numbers >= this with commas
-    private static final Random   RNG              = new Random(42);
+    private static final int[]  SIZES            = {100, 1_000, 10_000, 100_000};
+    private static final int    RUNS             = 5;
+    private static final int    FORMAT_THRESHOLD = 1_000;
+    private static final int    SUMMARY_SIZE     = 10_000; // size used for C3 summary table
+    private static final Random RNG              = new Random(42);
+
+    // Data type labels
+    private static final String[] DATA_TYPES = {
+        "Random", "Sorted", "Reverse", "Nearly Sorted", "Many Duplicates"
+    };
+
+    // Algorithm labels
+    private static final String[] ALGORITHMS = {
+        "Insertion", "Merge", "Quick", "Heap"
+    };
+
+    // Storage for C3 summary: [dataType][algorithm] = avg time in ms
+    private static final double[][] summaryTimes =
+        new double[DATA_TYPES.length][ALGORITHMS.length];
 
     // =========================================================================
     // Main
     // =========================================================================
 
     public static void main(String[] args) {
-        String[] dataTypes = {"Random", "Sorted", "Reverse", "Nearly Sorted", "Many Duplicates"};
 
-        for (String dataType : dataTypes) {
-            printSectionHeader(dataType);
+        // Run full benchmark for all data types
+        for (int d = 0; d < DATA_TYPES.length; d++) {
+            printSectionHeader(DATA_TYPES[d]);
             printTableHeader();
 
             for (int n : SIZES) {
-                runAlgorithm("Insertion", n, dataType);
-                runAlgorithm("Merge",     n, dataType);
-                runAlgorithm("Quick",     n, dataType);
-                runAlgorithm("Heap",      n, dataType);
+                for (int a = 0; a < ALGORITHMS.length; a++) {
+                    double avgMs = runAlgorithm(ALGORITHMS[a], n, DATA_TYPES[d]);
+
+                    // Store result for C3 summary if this is the summary size
+                    if (n == SUMMARY_SIZE) {
+                        summaryTimes[d][a] = avgMs;
+                    }
+                }
                 if (n < SIZES[SIZES.length - 1]) System.out.println();
             }
             System.out.println();
         }
 
+        // Print C3 combined summary table
+        printC3SummaryTable();
+
+        // Print conclusions
         printConclusions();
     }
 
     // =========================================================================
-    // Core runner
+    // Core runner — returns average time in ms
     // =========================================================================
 
-    private static void runAlgorithm(String algo, int n, String dataType) {
-        double totalMs   = 0;
-        long totalCmp    = 0;
-        long totalSwaps  = 0;
-        double[] times   = new double[RUNS];
+    private static double runAlgorithm(String algo, int n, String dataType) {
+        double totalMs  = 0;
+        long totalCmp   = 0;
+        long totalSwaps = 0;
+        double[] times  = new double[RUNS];
 
         for (int run = 0; run < RUNS; run++) {
             int[] data    = generateData(n, dataType);
@@ -73,9 +99,9 @@ public class SortingBenchmark {
             totalCmp    += m.comparisons;
             totalSwaps  += m.swaps;
 
-            // Verify sort correctness on first run
+            // Verify correctness on first run only
             if (run == 0 && !isSorted(data)) {
-                System.err.printf("ERROR: %s sort produced incorrect result for n=%d%n", algo, n);
+                System.err.printf("ERROR: %s sort incorrect for n=%d%n", algo, n);
             }
         }
 
@@ -85,10 +111,37 @@ public class SortingBenchmark {
         double stdDev = stdDev(times, avgMs);
 
         String swapsStr = algo.equals("Merge") ? "N/A" : String.format("%,d", avgSwaps);
-        System.out.printf("%-12s %-14s %-8s %10.3f ± %5.3f  %,15d  %14s%n",
-                        algo, n >= FORMAT_THRESHOLD ? String.format("%,d", n) : String.valueOf(n),
-                        dataType.length() > 6 ? dataType.substring(0, 6) : dataType,
-                        avgMs, stdDev, avgCmp, swapsStr);
+        System.out.printf("%-12s %-14s %-15s %10.3f \u00b1 %5.3f  %,15d  %14s%n",
+                algo,
+                n >= FORMAT_THRESHOLD ? String.format("%,d", n) : String.valueOf(n),
+                dataType.length() > 13 ? dataType.substring(0, 13) : dataType,
+                avgMs, stdDev, avgCmp, swapsStr);
+
+        return avgMs;
+    }
+
+    // =========================================================================
+    // C3 Combined Summary Table (n = 10,000, all data types)
+    // =========================================================================
+
+    private static void printC3SummaryTable() {
+        System.out.println("================================================================");
+        System.out.println("C3 SUMMARY: PERFORMANCE BY DATA TYPE (n = 10,000) — Time in ms");
+        System.out.println("================================================================");
+        System.out.printf("%-18s %-14s %-12s %-12s %-12s%n",
+                "Data Type", "Insertion Sort", "Merge Sort", "Quick Sort", "Heap Sort");
+        System.out.println("-".repeat(70));
+
+        for (int d = 0; d < DATA_TYPES.length; d++) {
+            System.out.printf("%-18s %-14.3f %-12.3f %-12.3f %-12.3f%n",
+                    DATA_TYPES[d],
+                    summaryTimes[d][0],  // Insertion
+                    summaryTimes[d][1],  // Merge
+                    summaryTimes[d][2],  // Quick
+                    summaryTimes[d][3]); // Heap
+        }
+        System.out.println("================================================================");
+        System.out.println();
     }
 
     // =========================================================================
@@ -109,7 +162,6 @@ public class SortingBenchmark {
                 break;
             case "Nearly Sorted":
                 for (int i = 0; i < n; i++) arr[i] = i;
-                // Swap 10% randomly
                 int swaps = Math.max(1, n / 10);
                 for (int s = 0; s < swaps; s++) {
                     int a = RNG.nextInt(n), b = RNG.nextInt(n);
@@ -166,10 +218,10 @@ public class SortingBenchmark {
     }
 
     private static void printTableHeader() {
-        System.out.printf("%-12s %-14s %-8s %16s  %15s  %14s%n",
-                        "Algorithm", "Input Size", "Type", "Time(ms)±StdDev",
-                        "Comparisons", "Swaps");
-        System.out.println("-".repeat(80));
+        System.out.printf("%-12s %-14s %-15s %16s  %15s  %14s%n",
+                "Algorithm", "Input Size", "Data Type",
+                "Time(ms)\u00b1StdDev", "Comparisons", "Swaps");
+        System.out.println("-".repeat(90));
     }
 
     private static void printConclusions() {
@@ -178,8 +230,7 @@ public class SortingBenchmark {
         System.out.println("  - Quick Sort is fastest on average for random and nearly-sorted data.");
         System.out.println("  - Insertion Sort is competitive only for n <= 1,000.");
         System.out.println("  - Merge Sort provides consistent O(n log n) regardless of data order.");
-        System.out.println("  - Heap Sort uses O(1) extra space but is slower than Quick Sort in practice.");
-        System.out.println("  - Quick Sort degrades toward O(n^2) for sorted input without median pivot.");
+        System.out.println("  - Heap Sort uses O(1) extra space but is slower than Quick Sort.");
         System.out.println("  - Insertion Sort excels on Nearly Sorted data (approaches O(n)).");
         System.out.println("================================================================");
     }

@@ -16,7 +16,7 @@ package com.csc483.assignment.sorting;
  * HeapSort        O(n log n)  O(n log n)  O(n log n)  O(1)    No
  * </pre>
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  * @version 1.0
  */
 public class SortingAlgorithms {

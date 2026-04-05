@@ -3,7 +3,7 @@ package com.csc483.assignment.sorting;
 /**
  * Holds counters for comparisons and swaps made during a sorting run.
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  */
 public class SortMetrics {
     /** Number of element comparisons performed */

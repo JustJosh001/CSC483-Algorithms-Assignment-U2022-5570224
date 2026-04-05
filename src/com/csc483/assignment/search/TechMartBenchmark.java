@@ -10,7 +10,7 @@ import java.util.Random;
  * and compares sequential search versus binary search across
  * best-case, average-case, and worst-case scenarios.
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  * @version 1.0
  */
 public class TechMartBenchmark {

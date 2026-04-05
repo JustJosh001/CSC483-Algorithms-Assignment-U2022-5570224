@@ -4,7 +4,7 @@ package com.csc483.assignment.search;
  * Represents a product in the TechMart online store inventory.
  * Implements Comparable to support sorting by product ID.
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  * @version 1.0
  */
 public class Product implements Comparable<Product> {

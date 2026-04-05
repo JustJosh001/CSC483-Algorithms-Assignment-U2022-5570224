@@ -1,5 +1,7 @@
 # CSC483-Algorithms-Assignment
 
+**Name:** Mathias Joshua Abraham
+**Student ID:** U2022/5570224
 **Course:** CSC 483.1 – Algorithms Analysis and Design
 **Assignment:** Algorithm Design, Analysis, and Optimization for Real-World Systems
 **Session:** 2025/2026 | First Semester
@@ -39,7 +41,7 @@ CSC483-Algorithms-Assignment/
 | Dependency                        | Version | Purpose                                                |
 | --------------------------------- | ------- | ------------------------------------------------------ |
 | Java JDK                          | 20      | Language runtime and compiler                          |
-| JUnit Platform Console Standalone | 1.9.3   | Running JUnit 5 tests from command line                |
+| JUnit Platform Console Standalone | 5.9.3   | Running JUnit 5 tests from command line                |
 | Maven (pom.xl)                    | 3.9+    | VSCode error resolution and JUnit dependency managment |
 
 ---

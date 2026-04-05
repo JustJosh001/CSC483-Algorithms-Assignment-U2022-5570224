@@ -17,7 +17,7 @@ import java.util.Map;
  *   <li>hybridNameSearch      – O(1) average (HashMap lookup)</li>
  * </ul>
  *
- * @author CSC483 Student
+ * @author Student ID: U2022/5570224
  * @version 1.0
  */
 public class SearchAlgorithms {
